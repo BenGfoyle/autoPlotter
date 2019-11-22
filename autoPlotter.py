@@ -17,7 +17,8 @@ def fileRead():
     """
 
     #define lists and and file name, ISO-8859-1 for Irish characters
-    name, ext = txt1.get.split(".")
+    file = txt1.get()
+    name, ext = file.split(".")
     data = pd.DataFrame()
     if ext == "csv":
         data = pd.read_csv(file, encoding='ISO-8859-1')
