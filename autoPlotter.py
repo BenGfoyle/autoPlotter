@@ -11,13 +11,13 @@ import pandas as pd #csv handler
 import networkx as nx
 
 #==============================================================================
-def fileRead(file):
+def fileRead():
     """
     Overview: Read in a csv/json file of data and returns a pandas dataframe
     """
 
     #define lists and and file name, ISO-8859-1 for Irish characters
-    name, ext = file.split(".")
+    name, ext = txt1.get.split(".")
     data = pd.DataFrame()
     if ext == "csv":
         data = pd.read_csv(file, encoding='ISO-8859-1')
@@ -108,6 +108,7 @@ def makePlot():
     """
     Overview: Run the relivent plot routine when button pressed
     """
+    fileRead()
     graphType = tkvar.get()
     if graphType == "Network":
         networkPlot()
