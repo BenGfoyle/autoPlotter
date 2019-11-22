@@ -8,6 +8,7 @@ from tkinter import * #gui elements
 import numpy as np #mathematical functions
 import matplotlib.pyplot as plt #make plots
 import pandas as pd #csv handler
+import networkx as nx
 
 #==============================================================================
 def fileRead(file):
@@ -34,12 +35,25 @@ def fileRead(file):
     return data
 #==============================================================================
 
+#==============================================================================
+def extractData(data):
+    """
+    Overview: Return a dataframe with columns/variables requested
+    """
+    reliventData = []
+    return reliventData
+#==============================================================================
 
 #==============================================================================
 def networkPlot():
     """
     Overview: Return a network plot based on a given list
     """
+    G = nx.Graph()
+    G.add_edge(1,2)
+    G.add_edge(1,3)
+    nx.draw(G, with_labels=True)
+    plt.show()
     return
 #==============================================================================
 
@@ -48,6 +62,10 @@ def linePlot():
     """
     Overview: Return a line plot based on a given list
     """
+    x = [1,2,3]
+    y = [3,2,1]
+    plt.plot(x,y)
+    plt.show()
     return
 #==============================================================================
 
@@ -56,6 +74,10 @@ def scatterPlot():
     """
     Overview: Return a scatter plot based on a given list
     """
+    x = [1,2,3]
+    y = [3,2,1]
+    plt.scatter(x,y)
+    plt.show()
     return
 #==============================================================================
 
@@ -64,6 +86,9 @@ def histoPlot():
     """
     Overview: Return a histogram based on a given list
     """
+    x = [1,1,1,2,2,3]
+    plt.hist(x)
+    plt.show()
     return
 #==============================================================================
 
