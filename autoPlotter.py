@@ -36,12 +36,18 @@ def fileRead(file):
 #==============================================================================
 
 #==============================================================================
-def extractData(data):
+def extractData():
     """
     Overview: Return a dataframe with columns/variables requested
     """
-    reliventData = []
-    return reliventData
+    columns = txt2.get().split(",") #names of relivent columns
+    values = txt3.get().split("]")
+    values = filter(lambda a: a != "[", x) #re,oving brackets from list
+    col1 = data.groupby([columns[0]])
+    col2 = data.groupby([columns[1]])
+    col1 = [x for x in col1 if x in values[0]]
+    col1 = [x for x in col2 if x in values[1]]
+    return col1,col2
 #==============================================================================
 
 #==============================================================================
@@ -97,6 +103,21 @@ def histoPlot():
 """
 GUI Elements
 """
+#===============================================================================
+def makePlot():
+    """
+    Overview: Run the relivent plot routine when button pressed
+    """
+    graphType = tkvar.get()
+    if graphType == "Network":
+        networkPlot()
+    elif graphType == "Line":
+        linePlot()
+    elif graphType == "Scatter":
+        scatterPlot()
+    elif graphType == "Histogram":
+        histoPlot()
+#===============================================================================
 
 window = Tk()
 window.title("Clericus Visualisation")
@@ -110,30 +131,29 @@ lbl1.grid(column=0, row=0)
 txt1 = Entry(window, width = 25)
 txt1.grid(column = 1, row = 0)
 
-lbl2 = Label(window, text="Columns to View:")
+lbl2 = Label(window, text="Columns to View(a,b):")
 lbl2.grid(column=0, row=1)
 
 txt2 = Entry(window, width = 25)
 txt2.grid(column = 1, row = 1)
 
-lbl3 = Label(window, text="Values to View:")
+lbl3 = Label(window, text="Values to View(in first column):")
 lbl3.grid(column=0, row=2)
 
 txt3 = Entry(window, width = 25)
 txt3.grid(column = 1, row = 2)
 
-#button that runs function on click
-btn1 = Button(window, text="Network Graph", command = networkPlot)
-btn1.grid(column=0, row=4)
+#dropdown menu fo graph types
+graphs = {"Network","Line","Scatter","Histogram"}
+tkvar = StringVar(window)
+tkvar.set("Network")
 
-btn2 = Button(window, text="Scatter Plot", command = scatterPlot)
-btn2.grid(column=0, row=5)
+popupMenu = OptionMenu(window, tkvar, *graphs)
+Label(window, text="Choose a graph type").grid(column = 0, row = 3)
+popupMenu.grid(column = 1, row =3)
 
-btn3 = Button(window, text="Line Plot", command = linePlot)
-btn3.grid(column=1, row=4)
-
-btn3 = Button(window, text="Histogram", command = histoPlot)
-btn3.grid(column=1, row=5)
+btn3 = Button(window, text="Submit", command = makePlot)
+btn3.grid(column=2, row=3)
 
 #loop until closed
 window.mainloop()
