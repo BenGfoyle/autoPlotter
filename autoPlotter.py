@@ -94,8 +94,10 @@ def scatterPlot(x,y):
     """
     Overview: Return a scatter plot based on a given list
     """
+    print(len(x))
     plt.scatter(x,y)
     plt.show()
+
     return
 #==============================================================================
 
