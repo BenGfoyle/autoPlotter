@@ -8,6 +8,7 @@ from tkinter import * #gui elements
 import numpy as np #mathematical functions
 import matplotlib.pyplot as plt #make plots
 import pandas as pd #csv handler
+from itertools import groupby
 import networkx as nx
 
 #==============================================================================
@@ -29,71 +30,80 @@ def fileRead():
         print("Error: Unsupported File Type ", ext)
 
     #replace blanks with nan and drop anyt nan values
-    data.replace('', np.nan, inplace=True)
-    data = data.dropna(axis = 0, how = 'any', thresh = None, subset = None,
-                inplace = False)
+    # data.replace('', np.nan, inplace=True)
+    # data = data.dropna(axis = 0, how = 'any', thresh = None, subset = None,
+    #             inplace = False)
 
     return data
 #==============================================================================
 
 #==============================================================================
-def extractData():
+def extractData(data):
     """
     Overview: Return a dataframe with columns/variables requested
     """
     columns = txt2.get().split(",") #names of relivent columns
+    #removing brackets from list
     values = txt3.get().split("]")
-    values = filter(lambda a: a != "[", x) #re,oving brackets from list
-    col1 = data.groupby([columns[0]])
-    col2 = data.groupby([columns[1]])
-    col1 = [x for x in col1 if x in values[0]]
-    col1 = [x for x in col2 if x in values[1]]
-    return col1,col2
+    values = list(filter(lambda a: a != "[", values))
+    col1 = data[columns[0]]
+    col2 = data[columns[1]]
+    #col1 and col2 only have requested values
+    # col1 = [x for x in col1 if x in values[0]]
+    # col2 = [x for x in col2 if x in values[1]]
+    return list(col1),list(col2)
 #==============================================================================
 
 #==============================================================================
-def networkPlot():
+def networkPlot(x,y):
     """
     Overview: Return a network plot based on a given list
     """
     G = nx.Graph()
-    G.add_edge(1,2)
-    G.add_edge(1,3)
-    nx.draw(G, with_labels=True)
+    combined = list(zip(x,y))
+
+    combined = set(combined)
+
+    c1Filter, c2Filter = list(set(zip(*combined)))
+
+    #constuct graph of filtered nodes
+    filter = c1Filter + c2Filter
+    G = nx.Graph()
+    N = len(filter)
+    labels = filter
+    G.add_nodes_from(c1Filter)
+    G.add_nodes_from(c2Filter)
+    G.add_edges_from(combined)
+    nx.draw(G, with_labels = True)
     plt.show()
     return
 #==============================================================================
 
 #==============================================================================
-def linePlot():
+def linePlot(x,y):
     """
     Overview: Return a line plot based on a given list
     """
-    x = [1,2,3]
-    y = [3,2,1]
     plt.plot(x,y)
     plt.show()
     return
 #==============================================================================
 
 #==============================================================================
-def scatterPlot():
+def scatterPlot(x,y):
     """
     Overview: Return a scatter plot based on a given list
     """
-    x = [1,2,3]
-    y = [3,2,1]
     plt.scatter(x,y)
     plt.show()
     return
 #==============================================================================
 
 #==============================================================================
-def histoPlot():
+def histoPlot(x):
     """
     Overview: Return a histogram based on a given list
     """
-    x = [1,1,1,2,2,3]
     plt.hist(x)
     plt.show()
     return
@@ -109,16 +119,17 @@ def makePlot():
     """
     Overview: Run the relivent plot routine when button pressed
     """
-    fileRead()
+    data = fileRead()
+    x,y = extractData(data)
     graphType = tkvar.get()
     if graphType == "Network":
-        networkPlot()
+        networkPlot(x,y)
     elif graphType == "Line":
-        linePlot()
+        linePlot(x,y)
     elif graphType == "Scatter":
-        scatterPlot()
+        scatterPlot(x,y)
     elif graphType == "Histogram":
-        histoPlot()
+        histoPlot(x)
 #===============================================================================
 
 window = Tk()
